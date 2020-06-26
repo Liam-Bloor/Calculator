@@ -3,6 +3,8 @@ var number2 = []
 var operator = ""
 var operatorUsed = false
 var answer
+var ansGiven = false
+var i
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -32,7 +34,6 @@ const output = document.querySelector("#output")
 
 var ans = "ans"
 var num = 0
-var i
 var exponent = false
 var j = 12
 
@@ -41,6 +42,7 @@ seven.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 7
   storeNum(num)
   ans = checkLength(ans, num)
@@ -51,6 +53,7 @@ eight.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 8
   storeNum(num)
   ans = checkLength(ans, num)
@@ -61,6 +64,7 @@ nine.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 9
   storeNum(num)
   ans = checkLength(ans, num)
@@ -71,6 +75,7 @@ four.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 4
   storeNum(num)
   ans = checkLength(ans, num)
@@ -81,6 +86,7 @@ five.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 5
   storeNum(num)
   ans = checkLength(ans, num)
@@ -91,6 +97,7 @@ six.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 6
   storeNum(num)
   ans = checkLength(ans, num)
@@ -101,6 +108,7 @@ one.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 1
   storeNum(num)
   ans = checkLength(ans, num)
@@ -111,6 +119,7 @@ two.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 2
   storeNum(num)
   ans = checkLength(ans, num)
@@ -121,6 +130,7 @@ three.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 3
   storeNum(num)
   ans = checkLength(ans, num)
@@ -131,7 +141,19 @@ zero.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
   }
+  reset()
   num = 0
+  storeNum(num)
+  ans = checkLength(ans, num)
+  output.innerHTML = ans
+})
+
+point.addEventListener("click", () => {
+  if(ans === "ans"){
+    ans = ""
+  }
+  reset()
+  num = "."
   storeNum(num)
   ans = checkLength(ans, num)
   output.innerHTML = ans
@@ -140,24 +162,79 @@ zero.addEventListener("click", () => {
 
 
 add.addEventListener("click", () => {
+  reset()
   operatorUsed = true
+  this.exponent = false
+  i = 0
   operator = "+"
   ans = "+"
   output.innerHTML = ans
 })
 
+minus.addEventListener("click", () => {
+  reset()
+  operatorUsed = true
+  operator = "-"
+  ans = "-"
+  output.innerHTML = ans
+})
+
+multiply.addEventListener("click", () => {
+  reset()
+  operatorUsed = true
+  operator = "×"
+  ans = "×"
+  output.innerHTML = ans
+})
+
+divide.addEventListener("click", () => {
+  reset()
+  operatorUsed = true
+  operator = "÷"
+  ans = "÷"
+  output.innerHTML = ans
+})
+
 equals.addEventListener("click", () => {
   if(operatorUsed){
+    ansGiven = true
     console.log(number, number2)
     arrayToNumber()
     switch(operator){
       case "+":
-        answer = parseInt(this.number.join("")) + parseInt(this.number2.join(""))
+        answer = parseFloat(this.number.join("")) + parseFloat(this.number2.join(""))
+        answer = checkLength(answer.toString())
+        output.innerHTML = answer
+        break
+      case "-":
+        answer = parseFloat(this.number.join("")) - parseFloat(this.number2.join(""))
         console.log(number, number2, answer)
         output.innerHTML = answer
+        break
+      case "×":
+        answer = parseFloat(this.number.join("")) * parseFloat(this.number2.join(""))
+        console.log(number, number2, answer)
+        output.innerHTML = answer
+        break
+      case "÷":
+        answer = parseFloat(this.number.join("")) / parseFloat(this.number2.join(""))
+        console.log(number, number2, answer)
+        output.innerHTML = answer
+        break
     }
   }
 })
+
+function reset(){
+  if(ansGiven){
+    ansGiven = false
+    number = []
+    number2 = []
+    ans = ""
+    operator = ""
+    operatorUsed = false
+  }
+}
 
 function arrayToNumber(number, number2){
   number = parseInt(this.number.join(""))
@@ -174,9 +251,11 @@ function storeNum(num){//push number pressed to array
     console.log(number)
   }else{
     this.number2.push(num)
+    console.log(number2)
   }
 }
 function checkLength(ans, num){
+  console.log(num !== NaN)
   if(ans.length === 11){
     i = 13 //first standard form will be to the power of 13
   }
@@ -202,8 +281,9 @@ function checkLength(ans, num){
     ans = ansArr.join("")
     exponent = true
     return ans
-  }else{
+  }else if(num !== NaN){
     ans += num
     return ans
   }
+
 }
