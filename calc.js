@@ -4,7 +4,11 @@ var operator = ""
 var operatorUsed = false
 var answer
 var ansGiven = false
-var i
+var exponent = false
+var ansArr
+var finalAns = false
+decimal = false
+var alreadyExp = false
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -34,8 +38,8 @@ const output = document.querySelector("#output")
 
 var ans = "ans"
 var num = 0
-var exponent = false
-var j = 12
+
+
 
 
 seven.addEventListener("click", () => {
@@ -45,7 +49,7 @@ seven.addEventListener("click", () => {
   reset()
   num = 7
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -56,7 +60,7 @@ eight.addEventListener("click", () => {
   reset()
   num = 8
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -67,7 +71,7 @@ nine.addEventListener("click", () => {
   reset()
   num = 9
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -78,7 +82,7 @@ four.addEventListener("click", () => {
   reset()
   num = 4
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -89,7 +93,7 @@ five.addEventListener("click", () => {
   reset()
   num = 5
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -100,7 +104,7 @@ six.addEventListener("click", () => {
   reset()
   num = 6
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -111,7 +115,7 @@ one.addEventListener("click", () => {
   reset()
   num = 1
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -122,7 +126,7 @@ two.addEventListener("click", () => {
   reset()
   num = 2
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -133,7 +137,7 @@ three.addEventListener("click", () => {
   reset()
   num = 3
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -144,7 +148,7 @@ zero.addEventListener("click", () => {
   reset()
   num = 0
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -155,7 +159,7 @@ point.addEventListener("click", () => {
   reset()
   num = "."
   storeNum(num)
-  ans = checkLength(ans, num)
+  ans = checkLength(ans, false, num)
   output.innerHTML = ans
 })
 
@@ -164,8 +168,9 @@ point.addEventListener("click", () => {
 add.addEventListener("click", () => {
   reset()
   operatorUsed = true
+  decimal = false
+  alreadyExp = false
   this.exponent = false
-  i = 0
   operator = "+"
   ans = "+"
   output.innerHTML = ans
@@ -174,6 +179,9 @@ add.addEventListener("click", () => {
 minus.addEventListener("click", () => {
   reset()
   operatorUsed = true
+  this.exponent = false
+  decimal = false
+  alreadyExp = false
   operator = "-"
   ans = "-"
   output.innerHTML = ans
@@ -182,6 +190,9 @@ minus.addEventListener("click", () => {
 multiply.addEventListener("click", () => {
   reset()
   operatorUsed = true
+  this.exponent = false
+  decimal = false
+  alreadyExp = false
   operator = "×"
   ans = "×"
   output.innerHTML = ans
@@ -190,6 +201,9 @@ multiply.addEventListener("click", () => {
 divide.addEventListener("click", () => {
   reset()
   operatorUsed = true
+  this.exponent = false
+  decimal = false
+  alreadyExp = false
   operator = "÷"
   ans = "÷"
   output.innerHTML = ans
@@ -203,22 +217,26 @@ equals.addEventListener("click", () => {
     switch(operator){
       case "+":
         answer = parseFloat(this.number.join("")) + parseFloat(this.number2.join(""))
-        answer = checkLength(answer.toString())
+        console.log(answer)
+        answer = checkLength(answer.toString(),true)
         output.innerHTML = answer
         break
       case "-":
         answer = parseFloat(this.number.join("")) - parseFloat(this.number2.join(""))
-        console.log(number, number2, answer)
+        console.log(answer)
+        answer = checkLength(answer.toString(),true)
         output.innerHTML = answer
         break
       case "×":
         answer = parseFloat(this.number.join("")) * parseFloat(this.number2.join(""))
-        console.log(number, number2, answer)
+        console.log(answer)
+        answer = checkLength(answer.toString(),true)
         output.innerHTML = answer
         break
       case "÷":
         answer = parseFloat(this.number.join("")) / parseFloat(this.number2.join(""))
-        console.log(number, number2, answer)
+        console.log(answer)
+        answer = checkLength(answer.toString(),true)
         output.innerHTML = answer
         break
     }
@@ -233,14 +251,14 @@ function reset(){
     ans = ""
     operator = ""
     operatorUsed = false
+    decimal = false
+    alreadyExp = false
   }
 }
 
 function arrayToNumber(number, number2){
-  number = parseInt(this.number.join(""))
-  number2 = parseInt(this.number2.join(""))
-  console.log(number, number2)
-
+  number = parseFloat(this.number.join(""))
+  number2 = parseFloat(this.number2.join(""))
   return number, number2
 }
 
@@ -248,42 +266,70 @@ function arrayToNumber(number, number2){
 function storeNum(num){//push number pressed to array
   if(!operatorUsed){
     this.number.push(num.toString())
-    console.log(number)
   }else{
-    this.number2.push(num)
-    console.log(number2)
+    this.number2.push(num.toString())
   }
 }
-function checkLength(ans, num){
-  console.log(num !== NaN)
-  if(ans.length === 11){
-    i = 13 //first standard form will be to the power of 13
+function checkLength(ans, finalAns, num){
+  let exp
+  if(num !== NaN && !finalAns){
+    ans += num
   }
-  if(this.exponent){ //If we have an exponent
-    i += 1
-    var ansArr = ans.split("")
-    if(i >= 100){
-      ansArr.splice(ansArr.length - 3, 3, i) //remove numbers after E and add new i
-    }else if(i >= 10){
-      ansArr.splice(-1,1)
-      ansArr.splice(-1,1)
-      ansArr.push(i)
+  if(!operatorUsed){
+    exp = number.length
+    if(decimal){
+      exp -=2
+      alreadyExp = true
+    }
+  }else{
+    exp = number2.length
+    if(decimal){
+      exp -=2
+      alreadyExp = true
+    }
+  }
+  if(exp == 11 && !alreadyExp){
+    if(operatorUsed){ //removes operator from start of ans
+      ansArr = ans.split("")
+      ansArr.shift()
+      ans = ansArr.join("").toString()
+      ansArr = ans.split("", 5)
     }else{
-      ansArr.splice(ansArr.length - 1, 1, i)
+      ansArr = ans.split("", 5)
+    }
+    if(ansArr[1] == "."){
+      decimal = true
+      exp -= 2
+      ansArr.push("E-", exp.toString())
+    }else{
+      ansArr.push("E", exp.toString())
+      ansArr.splice(1,0,".")
+    }
+    exponent = true
+  }
+  if(finalAns && ans.length > 11){ //if finalans have to find where to cut string
+    exp = ans.length
+    ansArr = ans.split("", 5)
+    if(ansArr[1] == "."){
+      decimal = true
+      exp -= 2
+      ansArr.push("E-", exp.toString())
+    }else{
+      ansArr.push("E", exp.toString())
+      ansArr.splice(1,0,".")
+    }
+    exponent = true
+  }
+  if(exponent){
+    if(exp >= 100){
+      ansArr.splice(ansArr.length - 2, 2, exp) //remove numbers after E and add new exp
+    }else if(exp >= 10){
+      ansArr.splice(-1,1)
+      ansArr.push(exp)
     }
     ans = ansArr.join("")
-    return ans
-  }
-  if(ans.length > 11){ //initialise exponent when ans length > length of box
-    var ansArr = ans.split("", ans.length-6)
-    ansArr.push("E", i.toString())
-    ansArr.splice(1,0,".")
-    ans = ansArr.join("")
-    exponent = true
-    return ans
-  }else if(num !== NaN){
-    ans += num
-    return ans
   }
 
+
+  return ans
 }
