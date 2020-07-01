@@ -11,7 +11,6 @@ decimal = false
 var alreadyExp = false
 document.addEventListener('DOMContentLoaded', () => {
 
-
  /*-----------  Initialise buttons ----------*/
 
 
@@ -39,9 +38,6 @@ const output = document.querySelector("#output")
 var ans = "ans"
 var num = 0
 
-
-
-
 seven.addEventListener("click", () => {
   if(ans === "ans"){
     ans = ""
@@ -49,7 +45,8 @@ seven.addEventListener("click", () => {
   reset()
   num = 7
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -60,7 +57,8 @@ eight.addEventListener("click", () => {
   reset()
   num = 8
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -71,7 +69,8 @@ nine.addEventListener("click", () => {
   reset()
   num = 9
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -82,7 +81,8 @@ four.addEventListener("click", () => {
   reset()
   num = 4
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -93,7 +93,8 @@ five.addEventListener("click", () => {
   reset()
   num = 5
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -104,7 +105,8 @@ six.addEventListener("click", () => {
   reset()
   num = 6
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -115,7 +117,8 @@ one.addEventListener("click", () => {
   reset()
   num = 1
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -126,7 +129,8 @@ two.addEventListener("click", () => {
   reset()
   num = 2
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -137,7 +141,8 @@ three.addEventListener("click", () => {
   reset()
   num = 3
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -148,7 +153,8 @@ zero.addEventListener("click", () => {
   reset()
   num = 0
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -159,7 +165,8 @@ point.addEventListener("click", () => {
   reset()
   num = "."
   storeNum(num)
-  ans = checkLength(ans, false, num)
+  ans = checkLength(ans, num)
+  changeSize(ans)
   output.innerHTML = ans
 })
 
@@ -218,41 +225,62 @@ equals.addEventListener("click", () => {
       case "+":
         answer = parseFloat(this.number.join("")) + parseFloat(this.number2.join(""))
         console.log(answer)
-        answer = checkLength(answer.toString(),true)
+        answer = checkLength(answer.toString())
+        console.log(answer)
+        changeSize(answer)
         output.innerHTML = answer
         break
       case "-":
         answer = parseFloat(this.number.join("")) - parseFloat(this.number2.join(""))
         console.log(answer)
-        answer = checkLength(answer.toString(),true)
+        answer = checkLength(answer.toString())
+        changeSize(answer)
         output.innerHTML = answer
         break
       case "×":
         answer = parseFloat(this.number.join("")) * parseFloat(this.number2.join(""))
         console.log(answer)
-        answer = checkLength(answer.toString(),true)
+        answer = checkLength(answer.toString())
+        changeSize(answer)
+        console.log(answer)
         output.innerHTML = answer
         break
       case "÷":
         answer = parseFloat(this.number.join("")) / parseFloat(this.number2.join(""))
         console.log(answer)
-        answer = checkLength(answer.toString(),true)
+        answer = checkLength(answer.toString())
+        changeSize(answer)
         output.innerHTML = answer
         break
     }
   }
 })
 
+function changeSize(ans){
+  if(ans.length > 11){
+    let coefficient = ans.length - 11
+    let fontSize = 7 - (coefficient * 0.3)
+    fontSize += "vh"
+    document.getElementById("output").style.fontSize = fontSize;
+  }else{
+    let fontSize = 7 + "vh"
+    document.getElementById("output").style.fontSize = fontSize;
+  }
+}
+
 function reset(){
   if(ansGiven){
     ansGiven = false
     number = []
     number2 = []
+    ansArr = []
     ans = ""
     operator = ""
     operatorUsed = false
     decimal = false
     alreadyExp = false
+    exponent = false
+    changeSize(ans)
   }
 }
 
@@ -270,9 +298,9 @@ function storeNum(num){//push number pressed to array
     this.number2.push(num.toString())
   }
 }
-function checkLength(ans, finalAns, num){
+function checkLength(ans, num){
   let exp
-  if(num !== NaN && !finalAns){
+  if(num !== NaN && num !== undefined){
     ans += num
   }
   if(!operatorUsed){
@@ -288,7 +316,7 @@ function checkLength(ans, finalAns, num){
       alreadyExp = true
     }
   }
-  if(exp == 11 && !alreadyExp){
+  if(exp == 11 && !alreadyExp && !ansGiven){
     if(operatorUsed){ //removes operator from start of ans
       ansArr = ans.split("")
       ansArr.shift()
@@ -307,9 +335,14 @@ function checkLength(ans, finalAns, num){
     }
     exponent = true
   }
-  if(finalAns && ans.length > 11){ //if finalans have to find where to cut string
+  if((ansGiven && ans.length > 11) || (ansGiven && ans >= 1e+21)){ //if finalans have to find where to cut string
+    if(ans >= 1e+20){
+      console.log("hi", ans)
+      return ans
+    }
     exp = ans.length
     ansArr = ans.split("", 5)
+    console.log(ansArr)
     if(ansArr[1] == "."){
       decimal = true
       exp -= 2
@@ -329,7 +362,5 @@ function checkLength(ans, finalAns, num){
     }
     ans = ansArr.join("")
   }
-
-
   return ans
 }
