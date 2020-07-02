@@ -38,6 +38,10 @@ section{
 }
 .button{
   cursor: hand;
+  user-select: none;
+}
+.box:active{
+  border-color: white;
 }
 #seven{
 
